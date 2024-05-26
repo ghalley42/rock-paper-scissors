@@ -18,22 +18,47 @@ h1 {
 
 section {
     width: 75%;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 }
 
 .gameboard {
     display: flex;
-    justify-content: space-around;
-    border: 1px solid black;
-    border-radius: 0.25rem;
+    justify-content: space-evenly;
     max-width: 100%;
     max-height: max-content;
+    padding: 0 5rem 2rem 5rem;
+    border-bottom: 1px solid black;
+    margin-bottom: 25px;
 }
 
 .player-choice, .computer-choice {
     width: 150px;
     height: 150px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
+}
+
+/* .side {
+    background-color: blue;
+} */
+
+.scoreboard {
+    display: flex;
+    align-items: flex-start;
+    gap: 50px;
+    justify-content: space-between;
+    padding: .35rem 25px 0 25px;
+    flex-grow: 1;
+}
+
+.round {
+    font-weight: bold;
+    font-size: 1.5rem;
+    
+}
+
+.score {
+    font-weight: bold;
+    font-size: 3rem;
 }
 
 .side {
@@ -52,7 +77,7 @@ section {
 .choices {
     display: flex;
     justify-content: space-around;
-    padding: 0 0 50px 0;
+    padding: 25px 0 50px 0;
     gap: 100px;
 }
 
