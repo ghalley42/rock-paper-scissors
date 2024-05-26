@@ -4,22 +4,37 @@ const imageSources = {
     "paper": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrIUy48U1C8Yetmv-aeKpAMbNgrJliB4gHKA&usqp=CAU",
     "scissors": "https://content.etilize.com/images/900/1069598981.jpg"
 }
-const playerImage = document.createElement("img");
-const computerImage = document.createElement("img");
+// Create the img tags to show current round choices
+const playerImage = document.createElement("img"); 
+const computerImage = document.createElement("img"); 
 
 const playerSide = document.querySelector('div.player-choice');
 const computerSide = document.querySelector('div.computer-choice');
 const newGame = document.querySelector("button");
-const playerScore = document.querySelector("#player-score");
-const computerScore = document.querySelector("#computer-score");
+const playerScoreCounter = document.querySelector("#player-score");
+const computerScoreCounter = document.querySelector("#computer-score");
+const roundCounter = document.querySelector('span.round-counter');
+
+let playerScore = 0;
+let computerScore = 0;
 
 newGame.addEventListener("click", () => resetBoard());
+
+const resetBoard = () => {
+    playerScoreCounter.textContent = 0;
+    computerScoreCounter.textContent = 0;
+    computerSide.removeChild(computerSide.firstElementChild);
+    playerSide.removeChild(playerSide.firstElementChild);
+    roundCounter.textContent = 1;
+    playerScore = 0;
+    computerScore = 0;
+}
 
 const getComputerChoice = () => {
     return options[Math.floor( Math.random() * 3 )];
 }
 
-const checkWinner = (playerChoice, computerChoice) => {
+const checkRoundWinner = (playerChoice, computerChoice) => {
     switch (playerChoice) {
         case "rock":
             return win = computerChoice == "scissors";
@@ -30,33 +45,38 @@ const checkWinner = (playerChoice, computerChoice) => {
     }
 }
 
+const checkGameWinner = () => {
+    if ( playerScore < 5 && computerScore < 5 ) return;
+    playerScore == 5 ? alert('Player Wins! Good Game :)') : alert('Computer Wins! Better Luck Next Time!');
+    resetBoard();
+}
+
 const updatePlayerImages = (player, computer) => {
     playerImage.src = imageSources[player];
     computerImage.src = imageSources[computer];
     playerSide.append(playerImage);
     computerSide.append(computerImage);
-}
+    setTimeout(() => {
+        computerSide.removeChild(computerSide.firstElementChild);
+        playerSide.removeChild(playerSide.firstElementChild);
+    }, 1300)
+};
 
 const updateScore = (winner) => {
     if (winner == "tie") return; 
-    return winner ? playerScore.textContent = Number(playerScore.textContent) + 1 : computerScore.textContent = Number(computerScore.textContent) + 1;
+    winner ? playerScoreCounter.textContent = Number(playerScoreCounter.textContent) + 1 : computerScoreCounter.textContent = Number(computerScoreCounter.textContent) + 1;
+    winner ? playerScore++ : computerScore++;
 }
 
 const playRound = (playerChoice, computerChoice) => {
     console.log(`Player: ${playerChoice}.  Computer: ${computerChoice}.`);
     updatePlayerImages(playerChoice, computerChoice);
-    let result = playerChoice == computerChoice ? "tie" : checkWinner(playerChoice, computerChoice);
+    let result = playerChoice == computerChoice ? "tie" : checkRoundWinner(playerChoice, computerChoice);
     updateScore(result);
-}
-
-const playGame = () => {
-    let playerScore = 0, computerScore = 0;
-    while ( playerScore < 5 && computerScore < 5 ) {
-        let roundScore = playRound(getPlayerChoice(), getComputerChoice());
-        roundScore == "tie" ? console.log("It's a tie!") : roundScore ? playerScore++ : computerScore++;
-        console.log(`Player: ${playerScore}. Computer: ${computerScore}.`);
-    };
-    alert(playerScore == 5 ? "Player Wins!" : "Computer Wins!");
+    setTimeout(() => {
+        if ( result != "tie" ) roundCounter.innerHTML = Number(roundCounter.innerHTML) + 1;
+    }, 1300);
+    checkGameWinner();
 }
 
 const playerMoves = document.querySelectorAll("img.btn");
